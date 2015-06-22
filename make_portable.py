@@ -75,6 +75,9 @@ SITE_PACKAGES = {
     "django-mptt": {
         "copy": ["mptt"],
     },
+    "djangorestframework": {
+        "copy": ["rest_framework"],
+    },
     "jsonfield": {
         "copy": ["jsonfield"],
     },
@@ -88,9 +91,9 @@ SITE_PACKAGES = {
     },
     "setuptools": {
         "copy": [
+            "pkg_resources",
             "setuptools",
             "easy_install.py",
-            "pkg_resources.py"
         ],
     },
     "six": {
@@ -110,38 +113,61 @@ SITE_PACKAGES = {
     },
     "wxpython-phoenix": {
         "copy": ["wx"],
-        # TODO: update exclude-list for phoenx
         "exclude": [
-            r"^wx/tools/",
-            r"^wx/py/",
-            r"^wx/build/",
             r"^wx/lib/",
-            r"wx/_activex.pyd",
-            r"wx/_animate.pyd",
-            r"wx/_aui.pyd",
-            r"wx/_calendar.pyd",
-            r"wx/_combo.pyd",
-            r"wx/_gizmos.pyd",
+            r"^wx/py/",
+            r"^wx/tools/",
+            r"wx/adv.pi",
+            r"wx/core.pi",
+            r"wx/dataview.pi",
+            r"wx/dataview.py",
+            r"wx/_dataview.pyd",
+            r"wx/freetype6.dll",
+            r"wx/glcanvas.pi",
+            r"wx/glcanvas.py",
             r"wx/_glcanvas.pyd",
+            r"wx/grid.pi",
+            r"wx/grid.py",
             r"wx/_grid.pyd",
+            r"wx/html.pi",
+            r"wx/html.py",
             r"wx/_html.pyd",
-            r"wx/_media.pyd",
-            r"wx/_richtext.pyd",
+            r"wx/html2.pi",
+            r"wx/html2.py",
+            r"wx/_html2.pyd",
+            r"wx/libcairo-2.dll",
+            r"wx/libcairo-gobject-2.dll",
+            r"wx/libcairo-script-interpreter-2.dll",
+            r"wx/libexpat-1.dll",
+            r"wx/libfontconfig-1.dll",
+            r"wx/libpng14-14.dll",
+            r"wx/stc.pi",
+            r"wx/stc.py",
             r"wx/_stc.pyd",
-            r"wx/_webkit.pyd",
-            r"wx/_wizard.pyd",
+            r"wx/richtext.pi",
+            r"wx/richtext.py",
+            r"wx/_richtext.pyd",
+            r"wx/webkit.pi",
+            r"wx/webkit.py",
+            r"wx/wxmsw30u_aui_vc100.dll",
+            r"wx/wxmsw30u_gl_vc100.dll",
+            r"wx/wxmsw30u_html_vc100.dll",
+            r"wx/wxmsw30u_media_vc100.dll",
+            r"wx/wxmsw30u_propgrid_vc100.dll",
+            r"wx/wxmsw30u_qa_vc100.dll",
+            r"wx/wxmsw30u_ribbon_vc100.dll",
+            r"wx/wxmsw30u_richtext_vc100.dll",
+            r"wx/wxmsw30u_stc_vc100.dll",
+            r"wx/wxmsw30u_webview_vc100.dll",
+            r"wx/wxmsw30u_xml_vc100.dll",
+            r"wx/wxmsw30u_xrc_vc100.dll",
+            r"wx/xrc.pi",
+            r"wx/xrc.py",
             r"wx/_xrc.pyd",
-            r"wx/gdiplus.dll",
-            r"wx/wxbase28uh_xml_vc.dll",
-            r"wx/wxmsw28uh_aui_vc.dll",
-            r"wx/wxmsw28uh_gizmos_vc.dll",
-            r"wx/wxmsw28uh_gizmos_xrc_vc.dll",
-            r"wx/wxmsw28uh_gl_vc.dll",
-            r"wx/wxmsw28uh_media_vc.dll",
-            r"wx/wxmsw28uh_qa_vc.dll",
-            r"wx/wxmsw28uh_richtext_vc.dll",
-            r"wx/wxmsw28uh_stc_vc.dll",
-            r"wx/wxmsw28uh_xrc_vc.dll",
+            r"wx/xml.pi",
+            r"wx/xml.py",
+            r"wx/_xml.pyd",
+            r"wx/zlib1.dll",
         ],
     },
     "openslides": {
@@ -151,7 +177,7 @@ SITE_PACKAGES = {
         "copy": ["openslides_gui"],
     },
     "psutil": {
-        "copy": ["psutil", "_psutil_windows.pyd"],
+        "copy": ["psutil"],
     },
 }
 
@@ -514,11 +540,9 @@ def main():
     with open(os.path.join(plugindir, 'README.txt'), "w") as readme:
         readme.writelines(readmetext)
 
-    # AUTHORS, LICENSE, README
-    # TODO: decide where to get this from and reenable
-    # write_metadatafile('AUTHORS', os.path.join(odir, 'AUTHORS.txt'))
+    # Add LICENSE and README
     write_metadatafile('LICENSE', os.path.join(odir, 'LICENSE.txt'))
-    # write_metadatafile('README.rst', os.path.join(odir, 'README.txt'))
+    write_metadatafile('README.rst', os.path.join(odir, 'README.txt'))
 
     zip_fp = os.path.join(
         "dist", "openslides-{0}-portable.zip".format(
