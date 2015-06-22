@@ -1,36 +1,34 @@
 How to create a new portable Windows distribution of OpenSlides:
 ----------------------------------------------------------------
 
-1. Install Python 2.7.x and Setuptools
+1. Install Python 3.3+ and Setuptools
    Follow the instructions in the README, section III (Windows installation), step 1.
 
 
-2. Install all required python packages from requirements_production.txt:
-   (Note: You have to use 'easy_install -Z $PACKAGENAME')
+2. Install OpenSlides 2.x package with all requirements:
 
-       python install-requirements.py
+       pip install openslides-2.x.tar.gz
 
 
-3. Install pywin32 from binary installer:
-   http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win32-py2.7.exe/download
+3. Install OpenSlides-GUI package with all requirements:
+
+       pip install openslides-gui-1.x.tar.gz
+
+
+4. Install pywin32 for your Python version:
+   http://sourceforge.net/projects/pywin32/files/pywin32/
 
    Pywin32 is used to update the version resource of the prebuild openslides.exe.
    It is not strictly required but at least for published releases it is highly advisable.
 
 
-4. Install wxPython from binary installer:
-   http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/wxPython2.8-win32-unicode-2.8.12.1-py27.exe/download
+5. Run in the main directory of the OpenSlides-portable checkout:
 
-   WxPython is required to build the OpenSlides GUI frontend.
-
-
-5. Run in the main directory of the OpenSlides checkout:
-
-       python extras\win32-portable\prepare_portable.py
+       python make_portable.py
 
 
 => The portable OpenSlides distribution is created as a zip archive in
-   the 'dist' directory of OpenSlides checkout.
+   the 'dist' directory.
 
 
 NOTE: Creating the portable Windows distribution of OpenSlides is not possible
