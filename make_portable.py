@@ -346,7 +346,7 @@ def compile_openslides_launcher():
         os.path.join(gui_data_dir, "openslides.ico"),
         "openslides.ico")
     rcfile = "openslides.rc"
-    openslides_version = _tmp_get_openslides_version()
+    openslides_version = get_openslides_version()
     with open(rcfile, "w") as f:
         if openslides_version[3] == "final":
             file_flags = "0"
@@ -382,7 +382,7 @@ def openslides_launcher_update_version_resource():
         return False
     import struct
 
-    openslides_version = _tmp_get_openslides_version()
+    openslides_version = get_openslides_version()
 
     sys.stdout.write("Updating version resource")
     # code based on win32verstamp.stamp() with some minor differences in
@@ -558,10 +558,16 @@ def main():
 
     print("Successfully build {0}".format(zip_fp))
 
-def _tmp_get_openslides_version():
-    # TODO: replace with actual version componentes
-    # maybe via pkg_resources distribution
-    return (2, 0, 0, "dev", 1)
+def get_openslides_version():
+    dist = pkg_resources.get_distribution("openslides")
+    state = "dev" if dist.parsed_version.is_prerelease else "final"
+    parts = [int(x, 10) for x in dist.parsed_version.base_version.split(".")]
+    # we always want 3 parts, filling with 0 if necessary
+    parts = (parts + 3 * [0])[:3]
+    parts.append(state)
+    # always use 0 as build number
+    parts.append(0)
+    return tuple(parts)
 
 
 if __name__ == "__main__":
