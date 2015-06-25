@@ -193,9 +193,6 @@ PY_DLLS = [
     "pyexpat.pyd",
 ]
 
-MSVCR_PUBLIC_KEY = "1fc8b3b9a1e18e3b"
-MSVCR_VERSION = "9.0.21022.8"
-MSVCR_NAME = "Microsoft.VC90.CRT"
 
 OPENSLIDES_RC_TMPL = """
 #include <winresrc.h>
@@ -430,41 +427,6 @@ def copy_dlls(odir):
     shutil.copyfile(src, dest)
 
 
-def copy_msvcr(odir):
-    candidates = glob.glob("{0}/x86_*{1}_{2}*".format(
-        os.path.join(os.environ["WINDIR"], "winsxs"),
-        MSVCR_NAME, MSVCR_PUBLIC_KEY))
-
-    msvcr_local_name = None
-    msvcr_dll_dir = None
-    for dp in candidates:
-        bn = os.path.basename(dp)
-        if MSVCR_VERSION in bn:
-            msvcr_local_name = bn
-            msvcr_dll_dir = dp
-            break
-    else:
-        sys.stderr.write(
-            "Warning could not determine msvcr runtime location\n"
-            "Private asssembly for VC runtime must be added manually\n")
-        return
-
-    msvcr_dest_dir = os.path.join(odir, MSVCR_NAME)
-    if not os.path.exists(msvcr_dest_dir):
-        os.makedirs(msvcr_dest_dir)
-
-    for fn in os.listdir(msvcr_dll_dir):
-        src = os.path.join(msvcr_dll_dir, fn)
-        dest = os.path.join(msvcr_dest_dir, fn)
-        shutil.copyfile(src, dest)
-
-    src = os.path.join(
-        os.environ["WINDIR"], "winsxs", "Manifests",
-        "{0}.manifest".format(msvcr_local_name))
-    dest = os.path.join(msvcr_dest_dir, "{0}.manifest".format(MSVCR_NAME))
-    shutil.copyfile(src, dest)
-
-
 def write_package_info_content(outfile):
     """
     Writes a list of all included packages into outfile.
@@ -523,7 +485,6 @@ def main():
         os.path.join(odir, "openslides.exe"))
 
     copy_dlls(odir)
-    copy_msvcr(odir)
 
     # Info on included packages
     shutil.copytree(
