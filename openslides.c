@@ -172,12 +172,12 @@ _run()
 }
 
 
-#if 0
-int WINAPI
-WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmdline, int show)
-#else
+#ifdef OPENSLIDES_CONSOLE
 int
 wmain(void)
+#else
+int WINAPI
+wWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPWSTR cmdline, int show)
 #endif
 {
     int returncode;
@@ -192,6 +192,9 @@ wmain(void)
     /* should always be the true */
     if (sep)
 	*sep = L'\0';
+
+    if (!__wargv || !*__wargv)
+	_fatal_error(L"Empty argument vector");
 
     _load_python(py_home);
     py_set_program_name(__wargv[0]);

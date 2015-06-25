@@ -362,11 +362,11 @@ def compile_openslides_launcher():
         "openslides.c",
         rcfile,
     ])
-    # TODO: temp. compiling as console build, for testing purposes
+
     cc.link_executable(
         objs, "openslides",
-        extra_preargs=["/subsystem:console", "/nodefaultlib:python34.lib", "/manifest"],
-        libraries=["user32"]
+        extra_preargs=["/subsystem:windows", "/nodefaultlib:python34.lib", "/manifest"],
+        libraries=["user32", "shell32"]
     )
     return True
 
