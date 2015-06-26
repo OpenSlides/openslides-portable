@@ -193,9 +193,6 @@ PY_DLLS = [
     "pyexpat.pyd",
 ]
 
-MSVCR_PUBLIC_KEY = "1fc8b3b9a1e18e3b"
-MSVCR_VERSION = "9.0.21022.8"
-MSVCR_NAME = "Microsoft.VC90.CRT"
 
 OPENSLIDES_RC_TMPL = """
 #include <winresrc.h>
@@ -346,7 +343,7 @@ def compile_openslides_launcher():
         os.path.join(gui_data_dir, "openslides.ico"),
         "openslides.ico")
     rcfile = "openslides.rc"
-    openslides_version = _tmp_get_openslides_version()
+    openslides_version = get_openslides_version()
     with open(rcfile, "w") as f:
         if openslides_version[3] == "final":
             file_flags = "0"
@@ -362,11 +359,11 @@ def compile_openslides_launcher():
         "openslides.c",
         rcfile,
     ])
-    # TODO: temp. compiling as console build, for testing purposes
+
     cc.link_executable(
         objs, "openslides",
-        extra_preargs=["/subsystem:console", "/nodefaultlib:python34.lib", "/manifest"],
-        libraries=["user32"]
+        extra_preargs=["/subsystem:windows", "/nodefaultlib:python34.lib", "/manifest"],
+        libraries=["user32", "shell32"]
     )
     return True
 
@@ -382,7 +379,7 @@ def openslides_launcher_update_version_resource():
         return False
     import struct
 
-    openslides_version = _tmp_get_openslides_version()
+    openslides_version = get_openslides_version()
 
     sys.stdout.write("Updating version resource")
     # code based on win32verstamp.stamp() with some minor differences in
@@ -427,41 +424,6 @@ def copy_dlls(odir):
     pydllname = "python{0}{1}.dll".format(*sys.version_info[:2])
     src = os.path.join(os.environ["WINDIR"], "System32", pydllname)
     dest = os.path.join(dll_dest, pydllname)
-    shutil.copyfile(src, dest)
-
-
-def copy_msvcr(odir):
-    candidates = glob.glob("{0}/x86_*{1}_{2}*".format(
-        os.path.join(os.environ["WINDIR"], "winsxs"),
-        MSVCR_NAME, MSVCR_PUBLIC_KEY))
-
-    msvcr_local_name = None
-    msvcr_dll_dir = None
-    for dp in candidates:
-        bn = os.path.basename(dp)
-        if MSVCR_VERSION in bn:
-            msvcr_local_name = bn
-            msvcr_dll_dir = dp
-            break
-    else:
-        sys.stderr.write(
-            "Warning could not determine msvcr runtime location\n"
-            "Private asssembly for VC runtime must be added manually\n")
-        return
-
-    msvcr_dest_dir = os.path.join(odir, MSVCR_NAME)
-    if not os.path.exists(msvcr_dest_dir):
-        os.makedirs(msvcr_dest_dir)
-
-    for fn in os.listdir(msvcr_dll_dir):
-        src = os.path.join(msvcr_dll_dir, fn)
-        dest = os.path.join(msvcr_dest_dir, fn)
-        shutil.copyfile(src, dest)
-
-    src = os.path.join(
-        os.environ["WINDIR"], "winsxs", "Manifests",
-        "{0}.manifest".format(msvcr_local_name))
-    dest = os.path.join(msvcr_dest_dir, "{0}.manifest".format(MSVCR_NAME))
     shutil.copyfile(src, dest)
 
 
@@ -523,7 +485,6 @@ def main():
         os.path.join(odir, "openslides.exe"))
 
     copy_dlls(odir)
-    copy_msvcr(odir)
 
     # Info on included packages
     shutil.copytree(
@@ -558,10 +519,16 @@ def main():
 
     print("Successfully build {0}".format(zip_fp))
 
-def _tmp_get_openslides_version():
-    # TODO: replace with actual version componentes
-    # maybe via pkg_resources distribution
-    return (2, 0, 0, "dev", 1)
+def get_openslides_version():
+    dist = pkg_resources.get_distribution("openslides")
+    state = "dev" if dist.parsed_version.is_prerelease else "final"
+    parts = [int(x, 10) for x in dist.parsed_version.base_version.split(".")]
+    # we always want 3 parts, filling with 0 if necessary
+    parts = (parts + 3 * [0])[:3]
+    parts.append(state)
+    # always use 0 as build number
+    parts.append(0)
+    return tuple(parts)
 
 
 if __name__ == "__main__":
