@@ -12,8 +12,8 @@ plattforms (Mac OS X, Linux) are planned for the future.
 Requirements
 ============
 
-- OpenSlides 2.x (http://openslides.org/)
-- OpenSlides-GUI
+- `OpenSlides <https://github.com/OpenSlides/OpenSlides/>`_ 2.x
+- `OpenSlides-GUI <https://github.com/OpenSlides/openslides-gui/>`_
 
 
 Build a Windows portable Version
@@ -22,7 +22,8 @@ Build a Windows portable Version
 This is an instruction to create a portable Windows distribution of OpenSlides.
 
 1. Install Python 3.3+ and Setuptools
-   Follow the instructions in the README, section III (Windows installation), step 1.
+
+   Follow the instructions in the README of OpenSlides.
 
 
 2. Install OpenSlides 2.x package with all requirements::
@@ -35,7 +36,8 @@ This is an instruction to create a portable Windows distribution of OpenSlides.
     $ pip install openslides-gui-1.x.tar.gz
 
 
-4. Install pywin32 for your Python version:
+4. Install pywin32 for your Python version from:
+
    http://sourceforge.net/projects/pywin32/files/pywin32/
 
    Pywin32 is used to update the version resource of the prebuild openslides.exe.
