@@ -72,9 +72,6 @@ SITE_PACKAGES = {
     "django-haystack": {
         "copy": ["haystack"],
     },
-    "django-mptt": {
-        "copy": ["mptt"],
-    },
     "djangorestframework": {
         "copy": ["rest_framework"],
     },
