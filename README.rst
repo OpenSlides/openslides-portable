@@ -33,7 +33,7 @@ This is an instruction to create a portable Windows distribution of OpenSlides.
 
 3. Install OpenSlides-GUI package with all requirements::
 
-    $ pip install openslides-gui-1.x.tar.gz
+    $ pip install openslides-gui
 
 
 4. Install pywin32 for your Python version from:
@@ -72,7 +72,7 @@ Authors
 Changelog
 =========
 
-Version 1.0 (unreleased)
+Version 1.0 (2015-12-07)
 ------------------------
 * First release of openslides-portable for OpenSlides 2.x.
   It's moved from old OpenSlides 1.x repository into an own openslides-portable package.
