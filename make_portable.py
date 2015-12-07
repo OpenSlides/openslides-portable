@@ -40,14 +40,12 @@ LIBEXCLUDE = [
 
 
 SITE_PACKAGES = {
+    # openslides dependencies
+    "backports-abc": {
+        "copy": ["backports_abc.py"],
+    },
     "beautifulsoup4": {
         "copy": ["bs4"],
-    },
-    "bleach": {
-        "copy": ["bleach"],
-    },
-    "html5lib": {
-        "copy": ["html5lib"],
     },
     "django": {
         "copy": ["django"],
@@ -66,17 +64,20 @@ SITE_PACKAGES = {
             r"^django/contrib/webdesign/",
         ]
     },
-    "django_ckeditor_updated": {
-        "copy": ["ckeditor"],
-    },
     "django-haystack": {
         "copy": ["haystack"],
     },
     "djangorestframework": {
         "copy": ["rest_framework"],
     },
+    "html5lib": {
+        "copy": ["html5lib"],
+    },
     "jsonfield": {
         "copy": ["jsonfield"],
+    },
+    "natsort": {
+        "copy": ["natsort"],
     },
     "reportlab": {
         "copy": [
@@ -101,12 +102,6 @@ SITE_PACKAGES = {
     },
     "tornado": {
         "copy": ["tornado"],
-    },
-    "natsort": {
-        "copy": ["natsort"],
-    },
-    "whoosh": {
-        "copy": ["whoosh"],
     },
     "wxpython-phoenix": {
         "copy": ["wx"],
@@ -167,9 +162,11 @@ SITE_PACKAGES = {
             r"wx/zlib1.dll",
         ],
     },
+    # openslides core
     "openslides": {
         "copy": ["openslides"],
     },
+    # openslides-gui
     "openslides_gui": {
         "copy": ["openslides_gui"],
     },
