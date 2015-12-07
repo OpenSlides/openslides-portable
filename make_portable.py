@@ -440,7 +440,7 @@ def write_package_info_content(outfile):
 
 def write_metadatafile(infile, outfile):
     """
-    Writes content from metadata files like README, AUTHORS and LICENSE into
+    Writes content from metadata files like README and LICENSE into
     outfile.
     """
     with open(infile, "rU") as f:
@@ -497,7 +497,7 @@ def main():
 
     # Add LICENSE and README
     write_metadatafile('LICENSE', os.path.join(odir, 'LICENSE.txt'))
-    write_metadatafile('README.rst', os.path.join(odir, 'README.txt'))
+    write_metadatafile('README-release.txt', os.path.join(odir, 'README.txt'))
 
     zip_fp = os.path.join(
         "dist", "openslides-{0}-portable.zip".format(

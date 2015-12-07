@@ -58,7 +58,7 @@ is installed in 64-bit(!) version.
 License
 =======
 
-This plugin is Free/Libre Open Source Software and distributed under the
+This software is Free/Libre Open Source Software and distributed under the
 MIT License, see LICENSE file.
 
 
