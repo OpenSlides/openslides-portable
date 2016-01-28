@@ -64,9 +64,6 @@ SITE_PACKAGES = {
             r"^django/contrib/webdesign/",
         ]
     },
-    "django-haystack": {
-        "copy": ["haystack"],
-    },
     "djangorestframework": {
         "copy": ["rest_framework"],
     },
@@ -78,6 +75,9 @@ SITE_PACKAGES = {
     },
     "natsort": {
         "copy": ["natsort"],
+    },
+    "pypdf2": {
+        "copy": ["PyPDF2"],
     },
     "reportlab": {
         "copy": [
@@ -102,6 +102,9 @@ SITE_PACKAGES = {
     },
     "tornado": {
         "copy": ["tornado"],
+    },
+    "whoosh": {
+        "copy": ["whoosh"],
     },
     "wxpython-phoenix": {
         "copy": ["wx"],
