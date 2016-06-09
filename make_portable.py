@@ -165,6 +165,28 @@ SITE_PACKAGES = {
             r"wx/zlib1.dll",
         ],
     },
+    # channels and all dependencies
+    "channels": {
+        "copy": ["channels"],
+    },
+    "daphne": {
+        "copy": ["daphne"],
+    },
+    "asgiref": {
+        "copy": ["asgiref"],
+    },
+    "autobahn": {
+        "copy": ["autobahn"],
+    },
+    "txaio": {
+        "copy": ["txaio"],
+    },
+    "twisted": {
+        "copy": ["twisted"],
+    },
+    "zope.interface": {
+        "copy": ["zope"],
+    },
     # openslides core
     "openslides": {
         "copy": ["openslides"],
