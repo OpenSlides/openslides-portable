@@ -42,27 +42,17 @@ LIBEXCLUDE = [
 
 SITE_PACKAGES = {
     # openslides dependencies
-    "backports-abc": {
-        "copy": ["backports_abc.py"],
-    },
     "beautifulsoup4": {
         "copy": ["bs4"],
     },
     "django": {
         "copy": ["django"],
         "exclude": [
-            r"^django/contrib/admindocs/",
-            r"^django/contrib/comments/",
-            r"^django/contrib/databrowse/",
             r"^django/contrib/flatpages/",
-            r"^django/contrib/formtools/",
             r"^django/contrib/gis/",
-            r"^django/contrib/localflavor/",
-            r"^django/contrib/markup/",
             r"^django/contrib/redirects/",
             r"^django/contrib/sitemaps/",
             r"^django/contrib/syndication/",
-            r"^django/contrib/webdesign/",
         ]
     },
     "djangorestframework": {
@@ -97,12 +87,6 @@ SITE_PACKAGES = {
     },
     "six": {
         "copy": ["six.py"],
-    },
-    "sockjs-tornado": {
-        "copy": ["sockjs"],
-    },
-    "tornado": {
-        "copy": ["tornado"],
     },
     "whoosh": {
         "copy": ["whoosh"],
@@ -496,7 +480,9 @@ def get_openslides_version():
 
 
 def cmd_build_portable(args):
-    exec_prefix = args.exec_prefix or sys.exec_prefix
+    exec_prefix = getattr(args, "exec_prefix", None)
+    if not exec_prefix:
+        exec_prefix = sys.exec_prefix
     libdir = os.path.join(exec_prefix, "Lib")
     prefix = os.path.dirname(sys.executable)
     sitedir = os.path.join(prefix, "lib", "site-packages")

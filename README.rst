@@ -21,7 +21,7 @@ Build a Windows portable Version
 
 This is an instruction to create a portable Windows distribution of OpenSlides.
 
-1. Install Python 3.3+ and Setuptools
+1. Install Python 3.5+ and Setuptools
 
    Follow the instructions in the README of OpenSlides.
 
