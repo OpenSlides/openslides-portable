@@ -8,7 +8,7 @@
 
 #include <Python.h>
 
-#define PYTHON_DLL_PATH L"\\Dlls\\python34.dll"
+#define PYTHON_DLL_PATH L"\\Dlls\\python35.dll"
 
 static void (*py_initialize)(void) = 0;
 static void (*py_finalize)(void) = 0;

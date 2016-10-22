@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import errno
 import glob
 import os
@@ -345,7 +346,7 @@ def collect_site_packages(sitedir, odir):
         copy_package(name, info, odir)
 
 
-def compile_openslides_launcher():
+def compile_openslides_launcher(subsystem="windows", exename="openslides"):
     try:
         cc = distutils.ccompiler.new_compiler()
         if not cc.initialized:
@@ -355,6 +356,8 @@ def compile_openslides_launcher():
 
     cc.add_include_dir(distutils.sysconfig.get_python_inc())
     cc.define_macro("_CRT_SECURE_NO_WARNINGS")
+    if subsystem == "console":
+        cc.define_macro("OPENSLIDES_CONSOLE")
 
     gui_data_dir = os.path.dirname(openslides_gui.__file__)
     gui_data_dir = os.path.join(gui_data_dir, "data")
@@ -379,9 +382,14 @@ def compile_openslides_launcher():
         rcfile,
     ])
 
+    python_lib = "python{0}{1}.lib".format(*sys.version_info[:2])
     cc.link_executable(
-        objs, "openslides",
-        extra_preargs=["/subsystem:windows", "/nodefaultlib:python34.lib", "/manifest"],
+        objs, exename,
+        extra_preargs=[
+            "/subsystem:{}".format(subsystem),
+            "/nodefaultlib:{}".format(python_lib),
+            "/manifest"
+        ],
         libraries=["user32", "shell32"]
     )
     return True
@@ -429,8 +437,10 @@ def openslides_launcher_update_version_resource():
     win32api.EndUpdateResource(h, 0)
 
 
-def copy_dlls(odir):
-    dll_src = os.path.join(sys.exec_prefix, "DLLs")
+def copy_dlls(odir, exec_prefix = None):
+    if exec_prefix is None:
+        exec_prefix = sys.exec_prefix
+    dll_src = os.path.join(exec_prefix, "DLLs")
     dll_dest = os.path.join(odir, "DLLs")
     if not os.path.exists(dll_dest):
         os.makedirs(dll_dest)
@@ -441,7 +451,7 @@ def copy_dlls(odir):
         shutil.copyfile(src, dest)
 
     pydllname = "python{0}{1}.dll".format(*sys.version_info[:2])
-    src = os.path.join(os.environ["WINDIR"], "System32", pydllname)
+    src = os.path.join(exec_prefix, pydllname)
     dest = os.path.join(dll_dest, pydllname)
     shutil.copyfile(src, dest)
 
@@ -473,11 +483,23 @@ def write_metadatafile(infile, outfile):
     with open(outfile, "w") as f:
         f.writelines(text)
 
+def get_openslides_version():
+    dist = pkg_resources.get_distribution("openslides")
+    state = "dev" if dist.parsed_version.is_prerelease else "final"
+    parts = [int(x, 10) for x in dist.parsed_version.base_version.split(".")]
+    # we always want 3 parts, filling with 0 if necessary
+    parts = (parts + 3 * [0])[:3]
+    parts.append(state)
+    # always use 0 as build number
+    parts.append(0)
+    return tuple(parts)
 
-def main():
+
+def cmd_build_portable(args):
+    exec_prefix = args.exec_prefix or sys.exec_prefix
+    libdir = os.path.join(exec_prefix, "Lib")
     prefix = os.path.dirname(sys.executable)
-    libdir = os.path.join(prefix, "Lib")
-    sitedir = os.path.join(libdir, "site-packages")
+    sitedir = os.path.join(prefix, "lib", "site-packages")
     odir = "dist/openslides-{0}-portable".format(openslides.__version__)
 
     try:
@@ -503,7 +525,7 @@ def main():
         "openslides.exe",
         os.path.join(odir, "openslides.exe"))
 
-    copy_dlls(odir)
+    copy_dlls(odir, exec_prefix=exec_prefix)
 
     # Info on included packages
     shutil.copytree(
@@ -538,17 +560,43 @@ def main():
 
     print("Successfully build {0}".format(zip_fp))
 
-def get_openslides_version():
-    dist = pkg_resources.get_distribution("openslides")
-    state = "dev" if dist.parsed_version.is_prerelease else "final"
-    parts = [int(x, 10) for x in dist.parsed_version.base_version.split(".")]
-    # we always want 3 parts, filling with 0 if necessary
-    parts = (parts + 3 * [0])[:3]
-    parts.append(state)
-    # always use 0 as build number
-    parts.append(0)
-    return tuple(parts)
 
+def cmd_compile_launcher(args):
+    if args.console:
+        exename = "openslides_console"
+        subsystem = "console"
+    else:
+        exename = "openslides"
+        subsystem = "windows"
+
+    compile_openslides_launcher(subsystem=subsystem, exename=exename)
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.set_defaults(func = cmd_build_portable)
+    sp = parser.add_subparsers()
+
+    p = sp.add_parser("build-portable")
+    p.add_argument(
+        "--exec-prefix",
+        help = "Override sys.exec_prefix (source for copying DLLs etc.)"
+    )
+    p.set_defaults(func = cmd_build_portable)
+
+    p = sp.add_parser("compile-launcher")
+    p.add_argument(
+        "--console", action="store_true",
+        help = "Build openslides_console.exe instead of openslides.exe"
+    )
+    p.set_defaults(func = cmd_compile_launcher)
+
+    args = parser.parse_args()
+    func = getattr(args, "func", None)
+    if func is None:
+        parser.print_usage()
+        sys.exit(1)
+
+    func(args)
 
 if __name__ == "__main__":
     main()
