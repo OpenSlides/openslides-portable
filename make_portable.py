@@ -42,9 +42,6 @@ LIBEXCLUDE = [
 
 SITE_PACKAGES = {
     # openslides dependencies
-    "beautifulsoup4": {
-        "copy": ["bs4"],
-    },
     "django": {
         "copy": ["django"],
         "exclude": [
@@ -58,22 +55,11 @@ SITE_PACKAGES = {
     "djangorestframework": {
         "copy": ["rest_framework"],
     },
-    "html5lib": {
-        "copy": ["html5lib"],
-    },
     "jsonfield": {
         "copy": ["jsonfield"],
     },
-    "natsort": {
-        "copy": ["natsort"],
-    },
     "pypdf2": {
         "copy": ["PyPDF2"],
-    },
-    "reportlab": {
-        "copy": [
-            "reportlab",
-        ],
     },
     "roman": {
         "copy": ["roman.py"],
