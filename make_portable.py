@@ -470,7 +470,12 @@ def write_metadatafile(infile, outfile):
 def get_openslides_version():
     dist = pkg_resources.get_distribution("openslides")
     state = "dev" if dist.parsed_version.is_prerelease else "final"
-    parts = [int(x, 10) for x in dist.parsed_version.base_version.split(".")]
+    parts = []
+    for x in dist.parsed_version.base_version.split("."):
+        try:
+            parts.append(int(x,10))
+        except (ValueError, TypeError):
+            break
     # we always want 3 parts, filling with 0 if necessary
     parts = (parts + 3 * [0])[:3]
     parts.append(state)
