@@ -420,6 +420,16 @@ def copy_dlls(odir, exec_prefix = None):
         dest = os.path.join(dll_dest, dll_name)
         shutil.copyfile(src, dest)
 
+    # copy required pywin32 *.pyd files from win32 directory (required by twisted)
+    # TODO: remove it if twisted is removed
+    pywinsrc = os.path.join(exec_prefix, 'Lib', 'site-packages', 'win32')
+    dest = os.path.join(dll_dest)
+    shutil.copy(os.path.join(pywinsrc, "win32api.pyd"), dest)
+    shutil.copy(os.path.join(pywinsrc, "win32pipe.pyd"), dest)
+    shutil.copy(os.path.join(pywinsrc, "win32file.pyd"), dest)
+    shutil.copy(os.path.join(pywinsrc, "lib", "pywintypes.py"), dest)
+    shutil.copy(os.path.join(pywinsrc, "_win32sysloader.pyd"), dest)
+
     pydllname = "python{0}{1}.dll".format(*sys.version_info[:2])
     src = os.path.join(exec_prefix, pydllname)
     dest = os.path.join(dll_dest, pydllname)
