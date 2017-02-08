@@ -42,6 +42,9 @@ LIBEXCLUDE = [
 
 SITE_PACKAGES = {
     # openslides dependencies
+    "bleach": {
+        "copy": ["bleach"],
+    },
     "django": {
         "copy": ["django"],
         "exclude": [
@@ -54,6 +57,9 @@ SITE_PACKAGES = {
     },
     "djangorestframework": {
         "copy": ["rest_framework"],
+    },
+    "html5lib": {
+        "copy": ["html5lib"],
     },
     "jsonfield": {
         "copy": ["jsonfield"],
@@ -153,7 +159,26 @@ SITE_PACKAGES = {
         "copy": ["txaio"],
     },
     "twisted": {
-        "copy": ["twisted"],
+        "copy": [
+            "twisted",
+            "win32",
+            "pywin32.pth",
+        ],
+    },
+    "packaging": {
+        "copy": ["packaging"],
+    },
+    "pyparsing": {
+        "copy": ["pyparsing.py"],
+    },
+    "appdirs": {
+        "copy": ["appdirs.py"],
+    },
+    "incremental": {
+        "copy": ["incremental"],
+    },
+    "constantly": {
+        "copy": ["constantly"],
     },
     "zope.interface": {
         "copy": ["zope"],
@@ -420,15 +445,12 @@ def copy_dlls(odir, exec_prefix = None):
         dest = os.path.join(dll_dest, dll_name)
         shutil.copyfile(src, dest)
 
-    # copy required pywin32 *.pyd files from win32 directory (required by twisted)
+    # copy pywin32 dlls (required by twisted)
     # TODO: remove it if twisted is removed
-    pywinsrc = os.path.join(exec_prefix, 'Lib', 'site-packages', 'win32')
+    sitedir = os.path.join(exec_prefix, "lib", "site-packages")
     dest = os.path.join(dll_dest)
-    shutil.copy(os.path.join(pywinsrc, "win32api.pyd"), dest)
-    shutil.copy(os.path.join(pywinsrc, "win32pipe.pyd"), dest)
-    shutil.copy(os.path.join(pywinsrc, "win32file.pyd"), dest)
-    shutil.copy(os.path.join(pywinsrc, "lib", "pywintypes.py"), dest)
-    shutil.copy(os.path.join(pywinsrc, "_win32sysloader.pyd"), dest)
+    shutil.copy(os.path.join(sitedir, "win32", "win32api.pyd"), dest)
+    shutil.copy(os.path.join(sitedir, "pywin32_system32", "pywintypes35.dll"), dest)
 
     pydllname = "python{0}{1}.dll".format(*sys.version_info[:2])
     src = os.path.join(exec_prefix, pydllname)
