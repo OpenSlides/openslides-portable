@@ -80,9 +80,6 @@ SITE_PACKAGES = {
     "six": {
         "copy": ["six.py"],
     },
-    "whoosh": {
-        "copy": ["whoosh"],
-    },
     "wxpython-phoenix": {
         "copy": ["wx"],
         "exclude": [
