@@ -180,6 +180,25 @@ SITE_PACKAGES = {
     "zope.interface": {
         "copy": ["zope"],
     },
+    # redis and postgres requirements
+    "asgi-redis": {
+        "copy": ["asgi_redis"],
+    },
+    "redis": {
+        "copy": ["redis"],
+    },
+    "msgpack-python": {
+        "copy": ["msgpack"],
+    },
+    "django-redis": {
+        "copy": ["django_redis"],
+    },
+    "django-redis-sessions": {
+        "copy": ["redis_sessions"],
+    },
+    "psycopg2": {
+        "copy": ["psycopg2"],
+    },
     # openslides core
     "openslides": {
         "copy": ["openslides"],
