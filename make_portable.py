@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import copy
 import errno
 import glob
 import os
@@ -478,15 +479,39 @@ def write_package_info_content(outfile):
     """
     Writes a list of all included packages into outfile.
     """
-    text = ['Included Packages\n', 17 * '=' + '\n', '\n']
-    for pkg in sorted(SITE_PACKAGES):
-        if pkg == "wx":
-            # wxpython comes from an installer and has no distribution
-            # --> handle it separately
-            text.append("wxpython-{0}\n".format(wx.__version__))
-        else:
-            dist = pkg_resources.get_distribution(pkg)
-            text.append("{0}-{1}\n".format(dist.project_name, dist.version))
+    text = ['Included Python Packages\n', 24 * '=' + '\n', '\n']
+
+    KEY_MAP = {
+        "Name": 'name',
+        "Version": 'version',
+        "Home-page": 'homepage',
+        "License": 'license',
+    }
+    empty_info = {}
+    for key, name in KEY_MAP.items():
+       empty_info[name] = ""
+
+    for pkg_name in sorted(SITE_PACKAGES):
+        pkg = pkg_resources.get_distribution(pkg_name)
+
+        info = copy.deepcopy(empty_info)
+        try:
+            lines = pkg.get_metadata_lines('METADATA')
+        except (KeyError, IOError):
+            lines = pkg.get_metadata_lines('PKG-INFO')
+        for line in lines:
+            try:
+                key, value = line.split(': ', 1)
+                if key in KEY_MAP and info['license'] == '':
+                    info[KEY_MAP[key]] = value
+            except ValueError:
+                pass
+        text.append("{0}-{1}\nLicense: {2}\nURL: {3}\n\n".format(
+            info['name'],
+            info['version'],
+            info['license'],
+            info['homepage']))
+
     with open(outfile, "w") as f:
         f.writelines(text)
 
@@ -553,9 +578,8 @@ def cmd_build_portable(args):
     copy_dlls(odir, exec_prefix=exec_prefix)
 
     # Info on included packages
-    shutil.copytree(
-        "licenses",
-        os.path.join(odir, "packages-info"))
+    packages_info = os.path.join(odir, "packages-info")
+    os.makedirs(packages_info)
     write_package_info_content(os.path.join(odir, 'packages-info', 'PACKAGES.txt'))
 
     # Create plugins directory with README.txt
