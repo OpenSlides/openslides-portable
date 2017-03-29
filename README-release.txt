@@ -24,7 +24,7 @@ What is OpenSlides?
 
 OpenSlides is a free web-based presentation and assembly system for
 displaying and controlling of agenda, motions and elections of an assembly.
-See http://openslides.org/ for more information.
+See https://openslides.org for more information.
 
 
 Used software
