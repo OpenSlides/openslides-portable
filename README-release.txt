@@ -7,7 +7,7 @@ required any install steps. To start OpenSlides just run openslides.exe.
 
 If you get an error message that a DLL file is missing you have to
 install Microsoft Visual C++ 2015 Redistributable Package (x86) from:
-https://www.microsoft.com/de-de/download/details.aspx?id=48145
+https://www.microsoft.com/de-de/download/details.aspx?id=52685
 Note that you have to install the 32bit version (vc_redist.x86.exe)
 even if you use a 64bit Windows.
 
