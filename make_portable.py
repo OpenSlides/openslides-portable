@@ -65,6 +65,9 @@ SITE_PACKAGES = {
     "jsonfield": {
         "copy": ["jsonfield"],
     },
+    "mypy_extensions": {
+        "copy": ["mypy_extensions.py"],
+    },
     "pypdf2": {
         "copy": ["PyPDF2"],
     },
@@ -81,7 +84,7 @@ SITE_PACKAGES = {
     "six": {
         "copy": ["six.py"],
     },
-    "wxpython-phoenix": {
+    "wxpython": {
         "copy": ["wx"],
         "exclude": [
             r"^wx/lib/",
@@ -156,6 +159,9 @@ SITE_PACKAGES = {
     "txaio": {
         "copy": ["txaio"],
     },
+    "txredisapi": {
+        "copy": ["txredisapi.py"],
+    },
     "twisted": {
         "copy": [
             "twisted",
@@ -207,10 +213,7 @@ SITE_PACKAGES = {
     # openslides-gui
     "openslides_gui": {
         "copy": ["openslides_gui"],
-    },
-    "psutil": {
-        "copy": ["psutil"],
-    },
+    }
 }
 
 PY_DLLS = [
