@@ -84,6 +84,9 @@ SITE_PACKAGES = {
     "six": {
         "copy": ["six.py"],
     },
+    "webencodings": {
+        "copy": ["webencodings"],
+    },
     "wxpython": {
         "copy": ["wx"],
         "exclude": [
