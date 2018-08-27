@@ -43,6 +43,9 @@ LIBEXCLUDE = [
 
 SITE_PACKAGES = {
     # openslides dependencies
+    "attr": {
+        "copy": ["attr"],
+    },
     "bleach": {
         "copy": ["bleach"],
     },
@@ -62,7 +65,7 @@ SITE_PACKAGES = {
     "html5lib": {
         "copy": ["html5lib"],
     },
-    "jsonfield": {
+    "jsonfield2": {
         "copy": ["jsonfield"],
     },
     "mypy_extensions": {
@@ -70,6 +73,9 @@ SITE_PACKAGES = {
     },
     "pypdf2": {
         "copy": ["PyPDF2"],
+    },
+    "pytz": {
+        "copy": ["pytz"],
     },
     "roman": {
         "copy": ["roman.py"],
@@ -172,15 +178,6 @@ SITE_PACKAGES = {
             "pywin32.pth",
         ],
     },
-    "packaging": {
-        "copy": ["packaging"],
-    },
-    "pyparsing": {
-        "copy": ["pyparsing.py"],
-    },
-    "appdirs": {
-        "copy": ["appdirs.py"],
-    },
     "incremental": {
         "copy": ["incremental"],
     },
@@ -206,7 +203,7 @@ SITE_PACKAGES = {
     "django-redis-sessions": {
         "copy": ["redis_sessions"],
     },
-    "psycopg2": {
+    "psycopg2-binary": {
         "copy": ["psycopg2"],
     },
     # openslides core
@@ -229,6 +226,8 @@ PY_DLLS = [
     "_ssl.pyd",
     "_multiprocessing.pyd",
     "pyexpat.pyd",
+    "_queue.pyd",
+    "_contextvars.pyd",
 ]
 
 
@@ -473,7 +472,7 @@ def copy_dlls(odir, exec_prefix = None):
     sitedir = os.path.join(exec_prefix, "lib", "site-packages")
     dest = os.path.join(dll_dest)
     shutil.copy(os.path.join(sitedir, "win32", "win32api.pyd"), dest)
-    shutil.copy(os.path.join(sitedir, "pywin32_system32", "pywintypes35.dll"), dest)
+    shutil.copy(os.path.join(sitedir, "pywin32_system32", "pywintypes37.dll"), dest)
 
     pydllname = "python{0}{1}.dll".format(*sys.version_info[:2])
     src = os.path.join(exec_prefix, pydllname)
@@ -527,7 +526,7 @@ def write_metadatafile(infile, outfile):
     Writes content from metadata files like README and LICENSE into
     outfile.
     """
-    with open(infile, "rU") as f:
+    with open(infile, "r") as f:
         text = [l for l in f]
     with open(outfile, "w") as f:
         f.writelines(text)
