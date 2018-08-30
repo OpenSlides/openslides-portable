@@ -1,3 +1,25 @@
+/**
+ * To compile this on Windows use vcvars.bat from cmd to set up a visual
+ * studio environment.
+ *
+ * In that environment call the compiler "cl" with the include path and
+ * library path of an installed python in the version you want to use.
+ *
+ * e.g.:
+ * > cl openslides.c \
+ *    -I C:\Users\User\AppData\Local\Programs\Python\Python37-32\include \
+ *    /link \
+ *    /LIBPATH:C:\Users\USER\AppData\Local\Programs\Python\Python37-32\libs
+ *
+ * > cl openslides.c -DOPENSLIDES_CONSOLE /o openslides_console.exe  \
+ *    -I C:\Users\USER\AppData\Local\Programs\Python\Python37-32\include \
+ *    /link \
+ *    /LIBPATH:C:\Users\USER\AppData\Local\Programs\Pytho\Python37-32\libs
+ *
+ * Below you have to modify the PYTHON_DLL_PATH after a major version
+ * upgrade accordingly.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -8,7 +30,9 @@
 
 #include <Python.h>
 
-#define PYTHON_DLL_PATH L"\\Dlls\\python35.dll"
+#pragma comment(lib, "user32")
+
+#define PYTHON_DLL_PATH L"\\Dlls\\python37.dll"
 
 static void (*py_initialize)(void) = 0;
 static void (*py_finalize)(void) = 0;

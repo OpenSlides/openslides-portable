@@ -21,30 +21,35 @@ Build a Windows portable Version
 
 This is an instruction to create a portable Windows distribution of OpenSlides.
 
-1. Install Python 3.5+ and Setuptools
+1. Install Python 3.7
 
    Follow the instructions in the README of OpenSlides.
-
 
 2. Install OpenSlides 2.x package with all requirements::
 
     $ pip install openslides-2.x.tar.gz
 
+   Unfortunately, twisted does not provide a binary wheel package for
+   python 3.7. So it could be easier to download and install a prebuild
+   whl package before you install OpenSlides, see
+   https://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted.
 
-3. Install OpenSlides-GUI package with all requirements::
+3. Navigate to OpenSlides 2.x git checkout and install the python requirements
+   of OpenSlides for big mode::
+
+    pip install -r requirements_big_mode.txt
+
+4. Install OpenSlides-GUI package with all requirements::
 
     $ pip install openslides-gui
 
+5. Install requirements for openslides-portable::
 
-4. Install pywin32 for your Python version from:
-
-   http://sourceforge.net/projects/pywin32/files/pywin32/
+    $ pip install pywin32 attr
 
    Pywin32 is used to update the version resource of the prebuild openslides.exe.
-   It is not strictly required but at least for published releases it is highly advisable.
 
-
-5. Run::
+6. Run::
 
     $ python make_portable.py
 
